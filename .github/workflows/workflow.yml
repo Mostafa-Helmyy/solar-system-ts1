@@ -47,3 +47,31 @@ jobs:
               with:
                 name: sp-Test-Result-${{matrix.nodejs_version}}-${{matrix.os}}
                 path: test-results.xml
+
+    code-coverage:
+        name: code coverage
+        needs: unit-testing
+        runs-on: ubuntu-latest
+        steps:
+            - name: chechout Repo
+              uses: actions/chechout@v5
+
+            - name: Setup NodeJs version - 18
+              uses: actions/setup-node@v4.4.0
+              with: 
+                node-version: 18
+
+            - name: install depend.
+              run: rpm run coverage
+
+
+            - name: chech code coverage
+              run: rpm run coverage
+
+            - name: archive coverage resuls
+              uses: actions/upload-artifact@v4.6.2
+              with: 
+                name: code-coverage-Result
+                path: coverage
+                retention-days: 5
+              
